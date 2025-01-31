@@ -1,25 +1,64 @@
+/* 主容器 */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: 20px;
+}
+
+/* 左側分類 */
+.album-list {
+    width: 200px;
+    background-color: #f8f8f8;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+
+.album-list h3 {
+    text-align: center;
+}
+
+.album-list ul {
+    list-style: none;
+    padding: 0;
+}
+
+.album-list ul li label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.album-list ul li input {
+    margin-right: 10px;
+}
+
+/* 相簿區域 */
+#gallery {
+    flex: 1;
+    padding: 20px;
+}
+
+/* 相簿圖片排列 */
+.album-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+/* 縮略圖 */
+.image-wrapper img {
+    width: 150px;
+    height: auto;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
 /* 分頁控制區 */
 .pagination-controls {
     text-align: center;
     margin-top: 20px;
-}
-
-.pagination-controls button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 5px;
-}
-
-.pagination-controls button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-}
-
-.pagination-controls select {
-    padding: 5px;
-    margin: 5px;
 }
