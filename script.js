@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const gallery = document.getElementById("gallery");
+    const albumCategories = document.getElementById("album-categories");
 
-    if (!gallery) return;
+    if (!gallery || !albumCategories) return;
 
     try {
         const response = await fetch("gallery.json");
@@ -9,71 +10,85 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const albums = await response.json();
         gallery.innerHTML = "";
+        albumCategories.innerHTML += Object.keys(albums).map(
+            category => `<li><a href="#" data-category="${category}">${category}</a></li>`
+        ).join("");
 
-        for (const [albumName, images] of Object.entries(albums)) {
-            const albumSection = document.createElement("section");
-            albumSection.innerHTML = `<h2>${albumName}</h2><div class="album-container"></div>`;
-            const albumContainer = albumSection.querySelector(".album-container");
+        // 點擊分類顯示相簿
+        document.querySelectorAll("#album-categories a").forEach(link => {
+            link.addEventListener("click", function (event) {
+                event.preventDefault();
+                document.querySelectorAll("#album-categories a").forEach(el => el.classList.remove("active"));
+                this.classList.add("active");
 
-            images.forEach((img, index) => {
-                const imgWrapper = document.createElement("div");
-                imgWrapper.classList.add("image-wrapper");
-
-                const imgElement = document.createElement("img");
-                imgElement.src = img.url;
-                imgElement.alt = img.title;
-                imgElement.classList.add("lightbox-trigger");
-                imgElement.dataset.src = img.url;
-                imgElement.dataset.index = index;
-
-                imgWrapper.appendChild(imgElement);
-                albumContainer.appendChild(imgWrapper);
+                const selectedCategory = this.dataset.category;
+                renderGallery(selectedCategory);
             });
+        });
 
-            albumSection.appendChild(albumContainer);
-            gallery.appendChild(albumSection);
-        }
+        // 預設顯示全部相簿
+        renderGallery("all");
 
-        bindLightbox();
     } catch (error) {
         console.error("相簿加載失敗:", error);
         gallery.innerHTML = "<p>相簿加載失敗，請稍後再試。</p>";
     }
 });
 
+// 渲染相簿
+function renderGallery(category) {
+    const gallery = document.getElementById("gallery");
+    fetch("gallery.json")
+        .then(response => response.json())
+        .then(albums => {
+            gallery.innerHTML = `<h2>${category === "all" ? "所有攝影作品" : category}</h2>`;
+            const selectedAlbums = category === "all" ? albums : { [category]: albums[category] };
+
+            for (const [albumName, images] of Object.entries(selectedAlbums)) {
+                const albumSection = document.createElement("section");
+                albumSection.innerHTML = `<h3>${albumName}</h3><div class="album-container"></div>`;
+                const albumContainer = albumSection.querySelector(".album-container");
+
+                images.forEach(img => {
+                    const imgWrapper = document.createElement("div");
+                    imgWrapper.classList.add("image-wrapper");
+
+                    const imgElement = document.createElement("img");
+                    imgElement.src = img.url;
+                    imgElement.alt = img.title;
+                    imgElement.classList.add("lightbox-trigger");
+                    imgElement.dataset.src = img.url;
+
+                    imgWrapper.appendChild(imgElement);
+                    albumContainer.appendChild(imgWrapper);
+                });
+
+                albumSection.appendChild(albumContainer);
+                gallery.appendChild(albumSection);
+            }
+
+            bindLightbox();
+        });
+}
+
+// Lightbox 點擊放大功能
 function bindLightbox() {
-    const images = document.querySelectorAll(".lightbox-trigger");
-    images.forEach(img => {
+    document.querySelectorAll(".lightbox-trigger").forEach(img => {
         img.addEventListener("click", function () {
-            openLightbox(this.dataset.src, Array.from(images));
+            openLightbox(this.dataset.src);
         });
     });
 }
 
-function openLightbox(imageSrc, images) {
-    let currentIndex = images.findIndex(img => img.dataset.src === imageSrc);
-
+function openLightbox(imageSrc) {
     const lightbox = document.createElement("div");
     lightbox.classList.add("lightbox");
     lightbox.innerHTML = `
         <span class="close-btn">&times;</span>
         <img src="${imageSrc}">
-        <button class="prev-btn">&#10094;</button>
-        <button class="next-btn">&#10095;</button>
     `;
 
     document.body.appendChild(lightbox);
-
-    function updateImage(index) {
-        if (index >= 0 && index < images.length) {
-            currentIndex = index;
-            lightbox.querySelector("img").src = images[currentIndex].dataset.src;
-        }
-    }
-
-    document.querySelector(".prev-btn").addEventListener("click", () => updateImage(currentIndex - 1));
-    document.querySelector(".next-btn").addEventListener("click", () => updateImage(currentIndex + 1));
-
     lightbox.addEventListener("click", (e) => {
         if (e.target === lightbox || e.target.classList.contains("close-btn")) {
             lightbox.remove();
