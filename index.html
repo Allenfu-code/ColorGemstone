@@ -1,22 +1,50 @@
+你的 `index.html` 看起來很簡潔，這裡有一些優化建議：
+
+1. **SEO 優化**：
+   - 增加 `meta` 描述，讓搜尋引擎更容易理解你的網站內容。
+   - 添加 `keywords` 以提升搜尋排名。
+
+2. **結構最佳化**：
+   - 用 `nav` 標籤包裹 `a` 標籤，讓語義更清晰。
+   - `main` 內部可使用 `section` 讓內容更有結構。
+
+3. **提升可訪問性（Accessibility）**：
+   - 為 `nav` 添加 `aria-label` 以增強輔助技術支持。
+   - 提供 `alt` 屬性（如果有圖片）。
+
+4. **提升網站效能**：
+   - 預加載 `stylesheet` (`<link rel="preload" href="styles.css" as="style">`) 以加快渲染速度。
+   - 如果 `script.js` 不是必要的，可以加上 `async`，減少阻塞。
+
+這是優化後的 `index.html`：
+
+```html
 <!DOCTYPE html>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的网站</title>
+    <meta name="description" content="這是我的個人網站，包含相簿功能">
+    <meta name="keywords" content="個人網站, 相簿, HTML, CSS, JavaScript">
+    <title>我的網站</title>
+    <link rel="preload" href="styles.css" as="style">
     <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+    <script async src="script.js"></script>
 </head>
 <body>
     <header>
-        <h1>欢迎来到我的网站</h1>
-        <nav>
-            <a href="index.html">首页</a>
-            <a href="gallery.html">相簿</a>
+        <h1>歡迎來到我的網站</h1>
+        <nav aria-label="主導航">
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="gallery.html">相簿</a></li>
+            </ul>
         </nav>
     </header>
     <main>
-        <p>这是我的个人网站，包含相簿功能。</p>
+        <section>
+            <p>這是我的個人網站，包含相簿功能。</p>
+        </section>
     </main>
 </body>
 </html>
