@@ -1,6 +1,15 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const gallery = document.getElementById("gallery");
     const albumCategories = document.getElementById("album-categories");
+    const itemsPerPageSelect = document.getElementById("itemsPerPage");
+    const prevPageBtn = document.getElementById("prevPage");
+    const nextPageBtn = document.getElementById("nextPage");
+    const pageInfo = document.getElementById("pageInfo");
+
+    let currentPage = 1;
+    let itemsPerPage = parseInt(itemsPerPageSelect.value);
+    let selectedCategories = ["all"];
+    let allImages = [];
 
     if (!gallery || !albumCategories) return;
 
@@ -18,7 +27,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         // 監聽勾選變更
         document.querySelectorAll("#album-categories input").forEach(checkbox => {
-            checkbox.addEventListener("change", updateGallery);
+            checkbox.addEventListener("change", () => {
+                selectedCategories = Array.from(document.querySelectorAll("#album-categories input:checked"))
+                    .map(input => input.dataset.category);
+                updateGallery();
+            });
+        });
+
+        // 監聽分頁數變更
+        itemsPerPageSelect.addEventListener("change", () => {
+            itemsPerPage = parseInt(itemsPerPageSelect.value);
+            currentPage = 1;
+            renderGallery();
+        });
+
+        // 監聽分頁按鈕
+        prevPageBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderGallery();
+            }
+        });
+
+        nextPageBtn.addEventListener("click", () => {
+            if (currentPage * itemsPerPage < allImages.length) {
+                currentPage++;
+                renderGallery();
+            }
         });
 
         // 預設顯示全部相簿
@@ -32,42 +67,63 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // 更新相簿顯示
 function updateGallery() {
-    const gallery = document.getElementById("gallery");
-    const selectedCategories = Array.from(document.querySelectorAll("#album-categories input:checked"))
-        .map(input => input.dataset.category);
-
     fetch("gallery.json")
         .then(response => response.json())
         .then(albums => {
-            gallery.innerHTML = `<h2>我的攝影作品</h2>`;
+            allImages = [];
+
             const selectedAlbums = selectedCategories.includes("all") ? albums :
                 Object.fromEntries(Object.entries(albums).filter(([key]) => selectedCategories.includes(key)));
 
             for (const [albumName, images] of Object.entries(selectedAlbums)) {
-                const albumSection = document.createElement("section");
-                albumSection.innerHTML = `<h3>${albumName}</h3><div class="album-container"></div>`;
-                const albumContainer = albumSection.querySelector(".album-container");
-
                 images.forEach(img => {
-                    const imgWrapper = document.createElement("div");
-                    imgWrapper.classList.add("image-wrapper");
-
-                    const imgElement = document.createElement("img");
-                    imgElement.src = img.url;
-                    imgElement.alt = img.title;
-                    imgElement.classList.add("lightbox-trigger");
-                    imgElement.dataset.src = img.url;
-
-                    imgWrapper.appendChild(imgElement);
-                    albumContainer.appendChild(imgWrapper);
+                    allImages.push({ album: albumName, ...img });
                 });
-
-                albumSection.appendChild(albumContainer);
-                gallery.appendChild(albumSection);
             }
 
-            bindLightbox();
+            currentPage = 1;
+            renderGallery();
         });
+}
+
+// 渲染分頁內容
+function renderGallery() {
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    const start = (currentPage - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    const paginatedImages = allImages.slice(start, end);
+
+    if (paginatedImages.length === 0) {
+        gallery.innerHTML = "<p>沒有符合條件的相片。</p>";
+        return;
+    }
+
+    const albumContainer = document.createElement("div");
+    albumContainer.classList.add("album-container");
+
+    paginatedImages.forEach(img => {
+        const imgWrapper = document.createElement("div");
+        imgWrapper.classList.add("image-wrapper");
+
+        const imgElement = document.createElement("img");
+        imgElement.src = img.url;
+        imgElement.alt = img.title;
+        imgElement.classList.add("lightbox-trigger");
+        imgElement.dataset.src = img.url;
+
+        imgWrapper.appendChild(imgElement);
+        albumContainer.appendChild(imgWrapper);
+    });
+
+    gallery.appendChild(albumContainer);
+    bindLightbox();
+
+    // 更新分頁資訊
+    pageInfo.textContent = `第 ${currentPage} 頁`;
+    prevPageBtn.disabled = currentPage === 1;
+    nextPageBtn.disabled = currentPage * itemsPerPage >= allImages.length;
 }
 
 // Lightbox 點擊放大功能

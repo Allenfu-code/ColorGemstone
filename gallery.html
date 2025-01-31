@@ -32,9 +32,21 @@
         </aside>
 
         <!-- 右側相簿顯示區 -->
-        <main id="gallery">
+        <main id="gallery-container">
             <h2>我的攝影作品</h2>
             <p>勾選分類來查看相片。</p>
+            <div id="gallery"></div>
+            <div class="pagination-controls">
+                <label for="itemsPerPage">每頁顯示：</label>
+                <select id="itemsPerPage">
+                    <option value="6">6</option>
+                    <option value="12" selected>12</option>
+                    <option value="24">24</option>
+                </select>
+                <button id="prevPage">上一頁</button>
+                <span id="pageInfo">第 1 頁</span>
+                <button id="nextPage">下一頁</button>
+            </div>
         </main>
     </div>
 </body>
