@@ -19,12 +19,15 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const imgWrapper = document.createElement("div");
                 imgWrapper.classList.add("image-wrapper");
 
+                // 設置縮略圖（小尺寸）
                 const imgElement = document.createElement("img");
                 imgElement.src = img.url;
                 imgElement.alt = img.title;
                 imgElement.classList.add("lightbox-trigger");
                 imgElement.dataset.src = img.url;
                 imgElement.dataset.index = index;
+                imgElement.style.width = "150px"; // 設定縮略圖大小
+                imgElement.style.cursor = "pointer"; // 指示可點擊
 
                 imgWrapper.appendChild(imgElement);
                 albumContainer.appendChild(imgWrapper);
@@ -57,7 +60,7 @@ function openLightbox(imageSrc, images) {
     lightbox.classList.add("lightbox");
     lightbox.innerHTML = `
         <span class="close-btn">&times;</span>
-        <img src="${imageSrc}">
+        <img src="${imageSrc}" class="lightbox-image">
         <button class="prev-btn">&#10094;</button>
         <button class="next-btn">&#10095;</button>
     `;
@@ -67,7 +70,7 @@ function openLightbox(imageSrc, images) {
     function updateImage(index) {
         if (index >= 0 && index < images.length) {
             currentIndex = index;
-            lightbox.querySelector("img").src = images[currentIndex].dataset.src;
+            lightbox.querySelector(".lightbox-image").src = images[currentIndex].dataset.src;
         }
     }
 
