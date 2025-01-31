@@ -10,24 +10,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const albums = await response.json();
         gallery.innerHTML = "";
+
+        // 建立分類勾選框
         albumCategories.innerHTML += Object.keys(albums).map(
-            category => `<li><a href="#" data-category="${category}">${category}</a></li>`
+            category => `<li><label><input type="checkbox" data-category="${category}" checked> ${category}</label></li>`
         ).join("");
 
-        // 點擊分類顯示相簿
-        document.querySelectorAll("#album-categories a").forEach(link => {
-            link.addEventListener("click", function (event) {
-                event.preventDefault();
-                document.querySelectorAll("#album-categories a").forEach(el => el.classList.remove("active"));
-                this.classList.add("active");
-
-                const selectedCategory = this.dataset.category;
-                renderGallery(selectedCategory);
-            });
+        // 監聽勾選變更
+        document.querySelectorAll("#album-categories input").forEach(checkbox => {
+            checkbox.addEventListener("change", updateGallery);
         });
 
         // 預設顯示全部相簿
-        renderGallery("all");
+        updateGallery();
 
     } catch (error) {
         console.error("相簿加載失敗:", error);
@@ -35,14 +30,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// 渲染相簿
-function renderGallery(category) {
+// 更新相簿顯示
+function updateGallery() {
     const gallery = document.getElementById("gallery");
+    const selectedCategories = Array.from(document.querySelectorAll("#album-categories input:checked"))
+        .map(input => input.dataset.category);
+
     fetch("gallery.json")
         .then(response => response.json())
         .then(albums => {
-            gallery.innerHTML = `<h2>${category === "all" ? "所有攝影作品" : category}</h2>`;
-            const selectedAlbums = category === "all" ? albums : { [category]: albums[category] };
+            gallery.innerHTML = `<h2>我的攝影作品</h2>`;
+            const selectedAlbums = selectedCategories.includes("all") ? albums :
+                Object.fromEntries(Object.entries(albums).filter(([key]) => selectedCategories.includes(key)));
 
             for (const [albumName, images] of Object.entries(selectedAlbums)) {
                 const albumSection = document.createElement("section");

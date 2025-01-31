@@ -28,20 +28,14 @@
     margin-bottom: 10px;
 }
 
-.album-list ul li a {
-    text-decoration: none;
-    color: #007bff;
-    font-weight: bold;
-    display: block;
-    padding: 5px;
-    border-radius: 5px;
-    transition: background 0.2s;
+.album-list ul li label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
-.album-list ul li a:hover,
-.album-list ul li a.active {
-    background-color: #007bff;
-    color: white;
+.album-list ul li input {
+    margin-right: 10px;
 }
 
 /* 相簿區域 */
