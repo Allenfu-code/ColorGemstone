@@ -3,20 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="我的相簿與作品集">
     <title>我的相簿</title>
     <link rel="stylesheet" href="styles.css">
     <script defer src="script.js"></script>
 </head>
 <body>
     <header>
-        <h1>我的相簿</h1>
-        <nav>
-            <a href="index.html">首页</a>
-            <a href="gallery.html">相簿</a>
+        <h1>我的作品集</h1>
+        <nav aria-label="主導航">
+            <ul>
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="gallery.html">相簿</a></li>
+                <li><a href="portfolio.html">作品集</a></li>
+            </ul>
         </nav>
     </header>
+
     <main id="gallery">
-        <p>加载相簿中...</p>
+        <h2>上傳您的照片</h2>
+        <form id="upload-form">
+            <input type="file" id="file-input" accept="image/*">
+            <button type="submit">上傳</button>
+        </form>
+        <p>加載相簿中...</p>
     </main>
 </body>
 </html>
