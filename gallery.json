@@ -1,5 +1,9 @@
-[
-    {"url": "images/image12.jpg", "title": "风景1"},
-    {"url": "images/image2.jpg", "title": "风景2"},
-    {"url": "images/image3.jpg", "title": "风景3"}
-]
+{
+    "旅行": [
+        {"url": "images/image12.jpg", "title": "海边"}
+    ],
+    "家庭": [
+        {"url": "images/image2.jpg", "title": "全家福"},
+        {"url": "images/image3.jpg", "title": "生日派对"}
+    ]
+}
