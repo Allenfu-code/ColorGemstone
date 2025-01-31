@@ -2,12 +2,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const gallery = document.getElementById("gallery");
     const albumCategories = document.getElementById("album-categories");
 
-    const response = await fetch("gallery.json");
-    const albums = await response.json();
+    if (!gallery || !albumCategories) return;
 
-    albumCategories.innerHTML += Object.keys(albums).map(
-        category => `<li><label><input type="checkbox" data-category="${category}" checked> ${category}</label></li>`
-    ).join("");
+    try {
+        const response = await fetch("gallery.json");
+        if (!response.ok) throw new Error("無法加載相簿數據");
 
         const albums = await response.json();
         gallery.innerHTML = "";
@@ -78,26 +77,20 @@ function bindLightbox() {
             openLightbox(this.dataset.src);
         });
     });
+}
 
-    itemsPerPageSelect.addEventListener("change", () => {
-        itemsPerPage = parseInt(itemsPerPageSelect.value);
-        currentPage = 1;
-        renderGallery();
-    });
+function openLightbox(imageSrc) {
+    const lightbox = document.createElement("div");
+    lightbox.classList.add("lightbox");
+    lightbox.innerHTML = `
+        <span class="close-btn">&times;</span>
+        <img src="${imageSrc}">
+    `;
 
-    prevPageBtn.addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            renderGallery();
+    document.body.appendChild(lightbox);
+    lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox || e.target.classList.contains("close-btn")) {
+            lightbox.remove();
         }
     });
-
-    nextPageBtn.addEventListener("click", () => {
-        if (currentPage * itemsPerPage < allImages.length) {
-            currentPage++;
-            renderGallery();
-        }
-    });
-
-    updateGallery();
-});
+}
