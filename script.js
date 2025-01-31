@@ -1,21 +1,21 @@
 document.addEventListener("DOMContentLoaded", async () => {
     const gallery = document.getElementById("gallery");
-    const uploadForm = document.getElementById("upload-form");
-    const fileInput = document.getElementById("file-input");
 
     if (!gallery) return;
 
-    // 加載已存圖片
-    let albums = JSON.parse(localStorage.getItem("albums")) || {};
+    try {
+        const response = await fetch("gallery.json");
+        if (!response.ok) throw new Error("無法加載相簿數據");
 
-    function renderGallery() {
-        gallery.innerHTML = "<h2>我的相簿</h2>";
-        Object.entries(albums).forEach(([albumName, images]) => {
+        const albums = await response.json();
+        gallery.innerHTML = "";
+
+        for (const [albumName, images] of Object.entries(albums)) {
             const albumSection = document.createElement("section");
-            albumSection.innerHTML = `<h3>${albumName}</h3><div class="album-container"></div>`;
+            albumSection.innerHTML = `<h2>${albumName}</h2><div class="album-container"></div>`;
             const albumContainer = albumSection.querySelector(".album-container");
 
-            images.forEach(img => {
+            images.forEach((img, index) => {
                 const imgWrapper = document.createElement("div");
                 imgWrapper.classList.add("image-wrapper");
 
@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 imgElement.alt = img.title;
                 imgElement.classList.add("lightbox-trigger");
                 imgElement.dataset.src = img.url;
+                imgElement.dataset.index = index;
 
                 imgWrapper.appendChild(imgElement);
                 albumContainer.appendChild(imgWrapper);
@@ -31,52 +32,51 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             albumSection.appendChild(albumContainer);
             gallery.appendChild(albumSection);
-        });
+        }
 
         bindLightbox();
+    } catch (error) {
+        console.error("相簿加載失敗:", error);
+        gallery.innerHTML = "<p>相簿加載失敗，請稍後再試。</p>";
     }
+});
 
-    function bindLightbox() {
-        document.querySelectorAll(".lightbox-trigger").forEach(img => {
-            img.addEventListener("click", function() {
-                openLightbox(this.dataset.src);
-            });
+function bindLightbox() {
+    const images = document.querySelectorAll(".lightbox-trigger");
+    images.forEach(img => {
+        img.addEventListener("click", function () {
+            openLightbox(this.dataset.src, Array.from(images));
         });
+    });
+}
+
+function openLightbox(imageSrc, images) {
+    let currentIndex = images.findIndex(img => img.dataset.src === imageSrc);
+
+    const lightbox = document.createElement("div");
+    lightbox.classList.add("lightbox");
+    lightbox.innerHTML = `
+        <span class="close-btn">&times;</span>
+        <img src="${imageSrc}">
+        <button class="prev-btn">&#10094;</button>
+        <button class="next-btn">&#10095;</button>
+    `;
+
+    document.body.appendChild(lightbox);
+
+    function updateImage(index) {
+        if (index >= 0 && index < images.length) {
+            currentIndex = index;
+            lightbox.querySelector("img").src = images[currentIndex].dataset.src;
+        }
     }
 
-    function openLightbox(imageSrc) {
-        const lightbox = document.createElement("div");
-        lightbox.classList.add("lightbox");
-        lightbox.innerHTML = `<img src="${imageSrc}"><span class="close-btn">&times;</span>`;
-        document.body.appendChild(lightbox);
+    document.querySelector(".prev-btn").addEventListener("click", () => updateImage(currentIndex - 1));
+    document.querySelector(".next-btn").addEventListener("click", () => updateImage(currentIndex + 1));
 
-        lightbox.addEventListener("click", (e) => {
-            if (e.target === lightbox || e.target.classList.contains("close-btn")) {
-                lightbox.remove();
-            }
-        });
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === "Escape") lightbox.remove();
-        }, { once: true });
-    }
-
-    // 上傳圖片
-    uploadForm.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const file = fileInput.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const newImage = { url: reader.result, title: file.name };
-                if (!albums["我的上傳"]) albums["我的上傳"] = [];
-                albums["我的上傳"].push(newImage);
-                localStorage.setItem("albums", JSON.stringify(albums));
-                renderGallery();
-            };
-            reader.readAsDataURL(file);
+    lightbox.addEventListener("click", (e) => {
+        if (e.target === lightbox || e.target.classList.contains("close-btn")) {
+            lightbox.remove();
         }
     });
-
-    renderGallery();
-});
+}
