@@ -8,16 +8,18 @@
     <title>我的攝影作品集</title>
     <link rel="preload" href="styles.css" as="style">
     <link rel="stylesheet" href="styles.css">
-    <script async src="script.js"></script>
+    <script defer src="script.js"></script>
 </head>
 <body>
     <header>
         <h1>我的攝影作品集</h1>
-        <nav aria-label="主導航">
+        <nav class="breadcrumb">
+            <a href="index.html">首頁</a> / <span>首頁</span>
+        </nav>
+        <nav>
             <ul>
                 <li><a href="index.html">首頁</a></li>
                 <li><a href="gallery.html">相簿</a></li>
-                <li><a href="portfolio.html">作品集</a></li>
             </ul>
         </nav>
     </header>
@@ -25,7 +27,6 @@
         <section>
             <p>歡迎來到我的攝影作品集，這裡展示了我最好的攝影作品。</p>
             <a href="gallery.html" class="btn">查看相簿</a>
-            <a href="portfolio.html" class="btn">作品集</a>
         </section>
     </main>
 </body>

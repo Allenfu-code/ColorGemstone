@@ -19,15 +19,14 @@ document.addEventListener("DOMContentLoaded", async () => {
                 const imgWrapper = document.createElement("div");
                 imgWrapper.classList.add("image-wrapper");
 
-                // 設置縮略圖（小尺寸）
                 const imgElement = document.createElement("img");
                 imgElement.src = img.url;
                 imgElement.alt = img.title;
                 imgElement.classList.add("lightbox-trigger");
                 imgElement.dataset.src = img.url;
                 imgElement.dataset.index = index;
-                imgElement.style.width = "150px"; // 設定縮略圖大小
-                imgElement.style.cursor = "pointer"; // 指示可點擊
+                imgElement.style.width = "150px";
+                imgElement.style.cursor = "pointer";
 
                 imgWrapper.appendChild(imgElement);
                 albumContainer.appendChild(imgWrapper);
@@ -50,36 +49,5 @@ function bindLightbox() {
         img.addEventListener("click", function () {
             openLightbox(this.dataset.src, Array.from(images));
         });
-    });
-}
-
-function openLightbox(imageSrc, images) {
-    let currentIndex = images.findIndex(img => img.dataset.src === imageSrc);
-
-    const lightbox = document.createElement("div");
-    lightbox.classList.add("lightbox");
-    lightbox.innerHTML = `
-        <span class="close-btn">&times;</span>
-        <img src="${imageSrc}" class="lightbox-image">
-        <button class="prev-btn">&#10094;</button>
-        <button class="next-btn">&#10095;</button>
-    `;
-
-    document.body.appendChild(lightbox);
-
-    function updateImage(index) {
-        if (index >= 0 && index < images.length) {
-            currentIndex = index;
-            lightbox.querySelector(".lightbox-image").src = images[currentIndex].dataset.src;
-        }
-    }
-
-    document.querySelector(".prev-btn").addEventListener("click", () => updateImage(currentIndex - 1));
-    document.querySelector(".next-btn").addEventListener("click", () => updateImage(currentIndex + 1));
-
-    lightbox.addEventListener("click", (e) => {
-        if (e.target === lightbox || e.target.classList.contains("close-btn")) {
-            lightbox.remove();
-        }
     });
 }
