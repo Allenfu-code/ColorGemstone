@@ -21,21 +21,34 @@
             </ul>
         </nav>
     </header>
-
-    <div class="container">
-        <!-- 左側相片冊分類 -->
-        <aside class="album-list">
-            <h3>分類</h3>
-            <ul id="album-categories">
-                <li><label><input type="checkbox" data-category="all" checked> 全部</label></li>
-            </ul>
-        </aside>
-
-        <!-- 右側相簿顯示區 -->
-        <main id="gallery">
-            <h2>我的攝影作品</h2>
-            <p>勾選分類來查看相片。</p>
-        </main>
-    </div>
+    <main>
+        <div class="gallery-container">
+            <aside class="sidebar">
+                <h3>相片冊類別</h3>
+                <div id="album-categories">
+                    <!-- 勾選式類別選項將由 script.js 動態生成 -->
+                </div>
+            </aside>
+            <section class="gallery-content" id="gallery-content">
+                <div class="pagination-settings">
+                    <label for="itemsPerPage">每頁顯示: </label>
+                    <select id="itemsPerPage">
+                        <option value="4">4</option>
+                        <option value="8" selected>8</option>
+                        <option value="12">12</option>
+                        <option value="16">16</option>
+                    </select>
+                </div>
+                <div id="gallery-images" class="album-container">
+                    <!-- 篩選後並分頁的相片將顯示於此 -->
+                </div>
+                <div class="pagination-controls">
+                    <button id="prevPage">上一頁</button>
+                    <span id="pageInfo">第 1 頁</span>
+                    <button id="nextPage">下一頁</button>
+                </div>
+            </section>
+        </div>
+    </main>
 </body>
 </html>
