@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <title>天麗產品簡易計算器</title>
+  <style>
+    /* 盡量縮小上下左右邊距與留白，字體仍維持適中大小方便閱讀 */
+    body {
+      margin: 10px;
+      font-family: Arial, sans-serif;
+      font-size: 18px; /* 適度放大，兼顧可讀性與一頁瀏覽 */
+      background-color: #F8F8F8;
+    }
+
+    h1 {
+      font-size: 24px;
+      color: #2C3E50;
+      margin: 10px 0;
+      text-align: center;
+    }
+
+    p {
+      text-align: center;
+      margin: 10px 0 20px;
+    }
+
+    /* 使用 CSS Grid 建立多欄布局，每個產品是一個卡片 */
+    .product-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+      /* minmax(250px,1fr)：每張卡片最小250px，太小時就自動換行 */
+      gap: 10px; /* 卡片間距 */
+      max-width: 1200px; /* 避免螢幕太寬時字體過度攤開 */
+      margin: 0 auto; /* 置中 */
+    }
+
+    .product-card {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 8px;
+      text-align: center;
+      min-height: 60px; /* 預留高度，避免字多時排版跳動 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    /* 數量調整區域 */
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quantity-control button {
+      width: 36px;
+      height: 36px;
+      font-size: 24px;
+      cursor: pointer;
+      background-color: #3498DB;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      margin: 0 8px;
+    }
+    .quantity-control button:hover {
+      opacity: 0.8;
+    }
+    .quantity-control span.qty {
+      display: inline-block;
+      min-width: 40px;
+      text-align: center;
+      font-weight: bold;
+      font-size: 22px;
+      color: #D35400;
+    }
+
+    /* 計算按鈕 */
+    .calculate-container {
+      text-align: center;
+      margin: 10px 0;
+    }
+    button.calculate {
+      padding: 8px 20px;
+      font-size: 20px;
+      background-color: #E67E22;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button.calculate:hover {
+      opacity: 0.9;
+    }
+
+    /* 結果區塊 */
+    .result {
+      max-width: 600px;
+      margin: 10px auto;
+      background-color: #FFF3E0;
+      padding: 10px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 20px;
+    }
+    .highlight {
+      color: #C0392B;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>天麗產品簡易計算器</h1>
+  <p>點選「- / +」調整數量 → 按下「計算」查看結果</p>
+
+  <!-- 產品列表 (多欄卡片式) -->
+  <div class="product-list">
+    <!-- 一個卡片代表一個產品，價格與PV藏在 data 屬性 -->
+    <div class="product-card" data-price="1995" data-pv="1700">
+      <div class="product-name">深層潔膚油 (A1)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="1995" data-pv="1700">
+      <div class="product-name">雙效潔顏露 (1)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="1995" data-pv="1700">
+      <div class="product-name">平衡柔膚露 (2)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3990" data-pv="3500">
+      <div class="product-name">雙效緊緻眼霜 (3)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="4200" data-pv="3600">
+      <div class="product-name">亮白晶華霜 (4)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3990" data-pv="3300">
+      <div class="product-name">均衡調理霜 (5)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="4200" data-pv="3800">
+      <div class="product-name">亮白防護霜 (6)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="4200" data-pv="3800">
+      <div class="product-name">潤白防護霜 (7)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3990" data-pv="3500">
+      <div class="product-name">貳活菁華霜 (8)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3465" data-pv="3100">
+      <div class="product-name">保濕修護霜 (9)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3990" data-pv="3500">
+      <div class="product-name">瞬效克麗精純液 (10)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3990" data-pv="3500">
+      <div class="product-name">凝采菁青春 (12)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="2415" data-pv="1800">
+      <div class="product-name">Bio雪肌面膜</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3465" data-pv="3000">
+      <div class="product-name">嫩白C粉 (10g)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="29400" data-pv="27000">
+      <div class="product-name">嫩白C粉 (100g)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="1995" data-pv="1700">
+      <div class="product-name">joli青春元素-F</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="1995" data-pv="1700">
+      <div class="product-name">joli亮采元素-L</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3360" data-pv="2600">
+      <div class="product-name">纖麗 365</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="2415" data-pv="1800">
+      <div class="product-name">纖麗365酵素液</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="1995" data-pv="1700">
+      <div class="product-name">魔瑞頂級薑椒軟</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="4725" data-pv="4200">
+      <div class="product-name">天麗康萃精華飲</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3300" data-pv="2200">
+      <div class="product-name">麗穀康奶菇 (30包)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+    <div class="product-card" data-price="3120" data-pv="2200">
+      <div class="product-name">麗穀康奶菇 (20包)</div>
+      <div class="quantity-control">
+        <button type="button" class="minusBtn">-</button>
+        <span class="qty">0</span>
+        <button type="button" class="plusBtn">+</button>
+      </div>
+    </div>
+  </div><!-- .product-list 結束 -->
+
+  <div class="calculate-container">
+    <button class="calculate" onclick="calculate()">計算</button>
+  </div>
+
+  <div class="result">
+    <p>總價格：<span class="highlight" id="totalPrice">0</span> 元</p>
+    <p>總 PV：<span class="highlight" id="totalPV">0</span></p>
+  </div>
+
+  <script>
+    // 掛上加減按鈕事件
+    document.querySelectorAll('.product-card').forEach(card => {
+      const minusBtn = card.querySelector('.minusBtn');
+      const plusBtn  = card.querySelector('.plusBtn');
+      const qtySpan  = card.querySelector('.qty');
+
+      minusBtn.addEventListener('click', () => {
+        let currentQty = parseInt(qtySpan.textContent) || 0;
+        currentQty = (currentQty > 0) ? currentQty - 1 : 0;
+        qtySpan.textContent = currentQty;
+      });
+
+      plusBtn.addEventListener('click', () => {
+        let currentQty = parseInt(qtySpan.textContent) || 0;
+        currentQty++;
+        qtySpan.textContent = currentQty;
+      });
+    });
+
+    // 計算總價格與總 PV
+    function calculate() {
+      let totalPrice = 0;
+      let totalPV = 0;
+
+      document.querySelectorAll('.product-card').forEach(card => {
+        const price = parseFloat(card.dataset.price);
+        const pv    = parseFloat(card.dataset.pv);
+
+        const qtySpan = card.querySelector('.qty');
+        const qty = parseInt(qtySpan.textContent) || 0;
+
+        totalPrice += price * qty;
+        totalPV += pv * qty;
+      });
+
+      document.getElementById('totalPrice').textContent = totalPrice;
+      document.getElementById('totalPV').textContent = totalPV;
+    }
+  </script>
+</body>
+</html>

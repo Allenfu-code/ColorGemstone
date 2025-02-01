@@ -184,4 +184,92 @@ main {
     z-index: 1000;
 }
 .lightbox img {
-    max-width:
+    max-width: 90%;
+    max-height: 80%;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+.close-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 40px;
+    color: #fff;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.close-btn:hover {
+    color: #ff4d4d;
+}
+.prev-btn, .next-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(37,117,252,0.8);
+    border: none;
+    color: #fff;
+    font-size: 30px;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.prev-btn:hover, .next-btn:hover {
+    background: rgba(106,17,203,0.8);
+}
+.prev-btn {
+    left: 30px;
+}
+.next-btn {
+    right: 30px;
+}
+
+/* Upload Section Styling */
+.upload-section {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.upload-section form div {
+    margin-bottom: 15px;
+}
+.upload-section label {
+    display: inline-block;
+    width: 120px;
+    font-weight: bold;
+}
+.upload-section input[type="text"],
+.upload-section input[type="file"],
+.upload-section select {
+    padding: 8px;
+    width: calc(100% - 130px);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+.upload-section button {
+    padding: 10px 20px;
+}
+#uploadMessage {
+    margin-top: 15px;
+    font-weight: bold;
+    color: green;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .gallery-container {
+        flex-direction: column;
+        margin: 10px;
+    }
+    .sidebar {
+        margin-bottom: 20px;
+    }
+    main {
+        margin: 10px;
+        padding: 15px;
+    }
+}

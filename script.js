@@ -20,6 +20,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         albums = await response.json();
 
+        // Load uploaded photos from localStorage
+        const uploaded = localStorage.getItem("uploadedPhotos");
+        if (uploaded) {
+            const uploadedPhotos = JSON.parse(uploaded);
+            uploadedPhotos.forEach(photo => {
+                if (albums[photo.album]) {
+                    albums[photo.album].push({ url: photo.url, title: photo.title });
+                } else {
+                    // 如果沒有這個相冊類別，則新增
+                    albums[photo.album] = [{ url: photo.url, title: photo.title }];
+                }
+            });
+        }
+
         // 生成勾選式的相片冊類別選項
         generateCategoryCheckboxes();
 
@@ -153,9 +167,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             const imgElement = document.createElement("img");
             imgElement.src = img.url;
             imgElement.alt = img.title;
-            imgElement.classList.add("lightbox-trigger");
-            // 將全局 filteredImages 陣列中的索引存入 data-index
+            imgElement.classList.add("photo-detail-trigger");
+            // 將全局 filteredImages 陣列中的索引與相冊存入 dataset
             imgElement.dataset.index = start + idx;
+            imgElement.dataset.album = img.album;
 
             imgWrapper.appendChild(imgElement);
             galleryImages.appendChild(imgWrapper);
@@ -165,53 +180,29 @@ document.addEventListener("DOMContentLoaded", async () => {
         prevPageBtn.disabled = (currentPage <= 1);
         nextPageBtn.disabled = (currentPage >= totalPages);
 
-        bindLightbox();
+        bindPhotoDetail();
     }
 
-    // 綁定 Lightbox 點擊事件，利用全局 filteredImages 陣列進行上一頁/下一頁瀏覽
-    function bindLightbox() {
-        const images = document.querySelectorAll(".lightbox-trigger");
+    // 綁定點擊事件，點選後跳轉至相片詳細資訊頁面
+    function bindPhotoDetail() {
+        const images = document.querySelectorAll(".photo-detail-trigger");
         images.forEach(img => {
             img.addEventListener("click", function () {
-                const idx = parseInt(this.dataset.index);
-                openLightbox(idx);
+                const photoUrl = this.src;
+                const album = this.dataset.album;
+                const params = new URLSearchParams();
+                params.set("url", photoUrl);
+                params.set("album", album);
+                window.location.href = "photo.html?" + params.toString();
             });
         });
     }
+});
 
-    // Lightbox 功能：使用 filteredImages 陣列進行瀏覽
-    function openLightbox(startIndex) {
-        let currentIndex = startIndex;
-        const lightbox = document.createElement("div");
-        lightbox.classList.add("lightbox");
-        lightbox.innerHTML = `
-            <span class="close-btn">&times;</span>
-            <img src="${filteredImages[currentIndex].url}">
-            <button class="prev-btn">&#10094;</button>
-            <button class="next-btn">&#10095;</button>
-        `;
-        document.body.appendChild(lightbox);
-
-        function updateImage(index) {
-            if (index >= 0 && index < filteredImages.length) {
-                currentIndex = index;
-                lightbox.querySelector("img").src = filteredImages[currentIndex].url;
-            }
-        }
-
-        lightbox.querySelector(".prev-btn").addEventListener("click", (e) => {
-            e.stopPropagation();
-            updateImage(currentIndex - 1);
-        });
-        lightbox.querySelector(".next-btn").addEventListener("click", (e) => {
-            e.stopPropagation();
-            updateImage(currentIndex + 1);
-        });
-
-        lightbox.addEventListener("click", (e) => {
-            if (e.target === lightbox || e.target.classList.contains("close-btn")) {
-                lightbox.remove();
-            }
-        });
+// 新增：監聽 localStorage 的更新事件，當 "uploadedPhotos" 或 "albumUpdate" 被修改時，自動更新 gallery.html 的相冊類別
+window.addEventListener("storage", (e) => {
+    if (e.key === "uploadedPhotos" || e.key === "albumUpdate") {
+        // 可選：重新讀取並更新 UI，這裡簡單採用重整頁面方式
+        location.reload();
     }
 });
