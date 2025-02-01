@@ -1,7 +1,7 @@
 {
     "旅行": [
         {"url": "images/image12.jpg", "title": "海边"},
-        {"url": "images/image13.jpg", "title": "山景"}
+        {"url": "images/image13.jpg", "title": "河景"}
     ],
     "家庭": [
         {"url": "images/image2.jpg", "title": "全家福"},
