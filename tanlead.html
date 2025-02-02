@@ -2,34 +2,33 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <!-- 加入 viewport 設定 -->
+  <!-- 必須的 viewport 設定，確保手機可正常縮放 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>天麗產品簡易計算器 (Checkbox + 清除按鈕)</title>
   <style>
-    /* 統一設定 box-sizing */
+    /* 統一計算模式，避免寬度被 padding/border 擠大 */
     * {
       box-sizing: border-box;
     }
-    
-    /* 基本樣式 */
+
     body {
-      margin: 10px;
+      margin: 0;                          /* 先把整體邊距歸零 */
       font-family: Arial, sans-serif;
-      font-size: 20px; /* 調大基本字體 */
+      font-size: 20px;                    /* 大字體方便閱讀 */
       background-color: #F8F8F8;
-      padding-bottom: 80px; /* 避免內容被底部固定列遮住 */
+      padding-bottom: 80px;               /* 避免內容被底部固定列遮住 */
     }
 
+    /* 頂部標題與說明 */
     h1 {
       font-size: 28px;
       color: #2C3E50;
-      margin: 10px 0;
+      margin: 10px;
       text-align: center;
     }
-
     p.desc {
       text-align: center;
-      margin: 5px 0 20px;
+      margin: 0 10px 20px;               /* 左右稍微留一點空間 */
       color: #666;
     }
 
@@ -51,29 +50,46 @@
       cursor: pointer;
     }
 
-    /* 兩欄佈局 */
-    .two-columns {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 20px;
-      width: 100%;
-      max-width: 1200px;
-      margin: 0 auto 20px;
+    /* 清除按鈕 */
+    .clear-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .clear-btn {
+      padding: 8px 20px;
+      font-size: 20px;
+      background-color: #E74C3C;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .clear-btn:hover {
+      opacity: 0.9;
     }
 
-    /* 左欄與右欄共用 */
+    /* 兩欄容器 - 讓它可橫向捲動，以免小螢幕截掉 */
+    .two-columns {
+      display: flex;
+      flex-wrap: nowrap;       /* 不換行，強制兩欄並排 */
+      overflow-x: auto;        /* 若空間不足，可左右捲動 */
+      gap: 10px;               /* 兩欄間距縮小為 10px，避免過度擠壓 */
+      margin: 0 10px 20px;     /* 與左右維持 10px 邊距 */
+    }
+
+    /* 左欄、右欄 - 各佔 50% */
     .column {
-      flex: 1;
+      flex: 0 0 50%;           /* 固定寬度一半 */
+      min-width: 300px;        /* 預防字體放大時欄過窄 */
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
 
-    /* 左欄分隔線 */
+    /* 輕微縮小邊框粗度，避免小螢幕截掉左邊 */
     .left-column {
-      border-right: 5px solid #000; 
-      padding-right: 15px;
+      border-right: 2px solid #000;
+      padding-right: 10px;
     }
 
     /* 區塊標題 */
@@ -109,7 +125,7 @@
       justify-content: center;
     }
 
-    /* 數量調整區域 */
+    /* 數量調整區域 (含 - / + 按鈕及輸入框) */
     .quantity-control {
       display: flex;
       align-items: center;
@@ -138,24 +154,6 @@
       padding: 4px;
     }
 
-    /* 清除按鈕 */
-    .clear-container {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-    .clear-btn {
-      padding: 8px 20px;
-      font-size: 20px;
-      background-color: #E74C3C;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .clear-btn:hover {
-      opacity: 0.9;
-    }
-
     /* 固定底部統計列 */
     .fixed-footer {
       position: fixed;
@@ -180,44 +178,41 @@
       font-weight: bold;
     }
 
-    /* Media Query：針對手機版進行調整 */
-    @media (max-width: 768px) {
-      /* 讓兩欄容器寬度保持 100%，並加入左右內距 */
+    /* 針對手機更小的螢幕，可以稍微縮小字體，避免過度超出 */
+    @media (max-width: 480px) {
       .two-columns {
-        padding: 0 10px;
+        gap: 5px;
+        margin: 0 5px 20px;
       }
-      .column {
-        flex: 1 1 0;
-        min-width: 0;
-      }
-      /* 調整按鈕與輸入框尺寸 */
-      .quantity-control button {
-        width: 50px;
-        height: 50px;
-        font-size: 32px;
-        margin: 0 10px;
-      }
-      .quantity-control input.qtyInput {
-        width: 90px;
-        font-size: 26px;
-        padding: 6px;
-      }
-      h1 {
-        font-size: 30px;
+      .left-column {
+        padding-right: 5px;
       }
       .product-name {
-        font-size: 24px;
-        min-height: 70px;
+        font-size: 20px;
       }
-      .membership-section label {
+      .quantity-control button {
+        width: 40px;
+        height: 40px;
         font-size: 24px;
       }
-      .clear-btn {
-        font-size: 22px;
-        padding: 10px 24px;
+      .quantity-control input.qtyInput {
+        width: 70px;
+        font-size: 20px;
       }
       .fixed-footer {
+        font-size: 20px;
+        gap: 30px;
+      }
+      h1 {
         font-size: 24px;
+        margin: 10px;
+      }
+      .membership-section label {
+        font-size: 20px;
+      }
+      .clear-btn {
+        font-size: 18px;
+        padding: 8px 16px;
       }
     }
   </style>
@@ -239,13 +234,12 @@
     <button class="clear-btn" onclick="clearAll()">清除所有數量</button>
   </div>
 
-  <!-- 兩欄區塊 -->
+  <!-- 兩欄分區 -->
   <div class="two-columns">
     <!-- 左欄：有代號的產品 -->
     <div class="column left-column">
       <div class="section-title">有代號的產品</div>
 
-      <!-- 每個 product-card 為一項產品 -->
       <div class="product-card" data-price="1995" data-pv="1700">
         <div class="product-name">深層潔膚油 (A1)</div>
         <div class="quantity-control">
@@ -458,9 +452,9 @@
         </div>
       </div>
     </div><!-- 右欄結束 -->
-  </div><!-- 兩欄區塊結束 -->
+  </div><!-- .two-columns 結束 -->
 
-  <!-- 固定底部統計資訊 -->
+  <!-- 固定底部的統計資訊 -->
   <div class="fixed-footer">
     <div class="footer-item">
       總數量：<span class="highlight" id="totalQty">0</span>
@@ -482,7 +476,7 @@
 
       document.querySelectorAll('.product-card').forEach(card => {
         const price = parseFloat(card.dataset.price) || 0;
-        const pv    = parseFloat(card.dataset.pv) || 0;
+        const pv    = parseFloat(card.dataset.pv)    || 0;
         const qtyInput = card.querySelector('.qtyInput');
         const qty   = parseInt(qtyInput.value) || 0;
 
@@ -497,13 +491,13 @@
         totalPrice += 1000;
       }
 
-      // 更新統計結果
+      // 更新頁面上的統計
       document.getElementById('totalQty').textContent   = totalQty;
       document.getElementById('totalPrice').textContent = totalPrice;
       document.getElementById('totalPV').textContent    = totalPV;
     }
 
-    // 清除所有數量後重新計算
+    // 清除所有數量
     function clearAll() {
       document.querySelectorAll('.qtyInput').forEach(input => {
         input.value = 0;
@@ -511,12 +505,13 @@
       calculate();
     }
 
-    // 為每個產品卡片的「- / +」按鈕與輸入框綁定事件
+    // 加減按鈕與輸入框事件
     document.querySelectorAll('.product-card').forEach(card => {
-      const minusBtn  = card.querySelector('.minusBtn');
-      const plusBtn   = card.querySelector('.plusBtn');
-      const qtyInput  = card.querySelector('.qtyInput');
+      const minusBtn = card.querySelector('.minusBtn');
+      const plusBtn  = card.querySelector('.plusBtn');
+      const qtyInput = card.querySelector('.qtyInput');
 
+      // 點擊 「-」按鈕
       minusBtn.addEventListener('click', () => {
         let currentQty = parseInt(qtyInput.value) || 0;
         currentQty = (currentQty > 0) ? currentQty - 1 : 0;
@@ -524,6 +519,7 @@
         calculate();
       });
 
+      // 點擊 「+」按鈕
       plusBtn.addEventListener('click', () => {
         let currentQty = parseInt(qtyInput.value) || 0;
         currentQty++;
@@ -531,6 +527,7 @@
         calculate();
       });
 
+      // 輸入框改變
       qtyInput.addEventListener('input', () => {
         let newQty = parseInt(qtyInput.value);
         if (isNaN(newQty) || newQty < 0) {
@@ -541,12 +538,12 @@
       });
     });
 
-    // 入會費狀態變更時重新計算
+    // 入會費勾選改變
     document.querySelector('.membershipFee').addEventListener('change', () => {
       calculate();
     });
 
-    // 頁面載入時計算一次
+    // 初始計算
     calculate();
   </script>
 </body>
