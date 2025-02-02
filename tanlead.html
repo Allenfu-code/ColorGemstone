@@ -6,6 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>天麗產品簡易計算器 (Checkbox + 清除按鈕)</title>
   <style>
+    /* 統一設定 box-sizing */
+    * {
+      box-sizing: border-box;
+    }
+    
     /* 基本樣式 */
     body {
       margin: 10px;
@@ -52,6 +57,7 @@
       justify-content: center;
       align-items: flex-start;
       gap: 20px;
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto 20px;
     }
@@ -174,8 +180,17 @@
       font-weight: bold;
     }
 
-    /* Media Query：手機版調整按鈕與文字大小，但保持兩欄佈局 */
+    /* Media Query：針對手機版進行調整 */
     @media (max-width: 768px) {
+      /* 讓兩欄容器寬度保持 100%，並加入左右內距 */
+      .two-columns {
+        padding: 0 10px;
+      }
+      .column {
+        flex: 1 1 0;
+        min-width: 0;
+      }
+      /* 調整按鈕與輸入框尺寸 */
       .quantity-control button {
         width: 50px;
         height: 50px;
