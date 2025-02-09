@@ -1,59 +1,79 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="相片詳細資訊">
-    <title>相片詳細資訊 - 我的攝影作品集</title>
-    <link rel="stylesheet" href="styles.css">
-    <!-- 新增：載入 Supabase 客戶端 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
-    <script defer src="photo.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="相片詳細資訊">
+  <title>相片詳細資訊 - 我的攝影作品集</title>
+
+  <!-- 原有樣式 -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- 1) 載入 Supabase 客戶端 (若已載入可省略) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+
+  <!-- 2) 載入我們的 photo.js -->
+  <script defer src="photo.js"></script>
 </head>
 <body>
-    <header>
-        <h1>相片詳細資訊</h1>
-        <nav class="breadcrumb">
-            <a href="index.html">首頁</a> / <span>相片詳細資訊</span>
-        </nav>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="gallery.html">相簿</a></li>
-                <li><a href="photo.html">相片詳細資訊</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="photo-detail-section">
-            <div class="photo-display">
-                <!-- 修改顯示的照片尺寸，讓照片縮小一些 -->
-                <img id="photoImage" src="" alt="相片" style="max-width:300px; width:100%; height:auto;">
-            </div>
-            <form id="photoDetailForm">
-                <input type="hidden" id="photoUrl" name="photoUrl">
-                <div>
-                    <label for="photoAlbum">相冊類別：</label>
-                    <input type="text" id="photoAlbum" name="album" required>
-                </div>
-                <div>
-                    <label for="photoTime">時間：</label>
-                    <input type="datetime-local" id="photoTime" name="time">
-                </div>
-                <div>
-                    <label for="photoLocation">地點：</label>
-                    <input type="text" id="photoLocation" name="location">
-                </div>
-                <div>
-                    <label for="photoDescription">說明：</label>
-                    <textarea id="photoDescription" name="description" rows="4"></textarea>
-                </div>
-                <div>
-                    <button type="submit" class="btn">更新內容</button>
-                </div>
-            </form>
-            <div id="updateMessage"></div>
-        </section>
-    </main>
+  <header>
+    <h1>相片詳細資訊</h1>
+    <nav class="breadcrumb">
+      <a href="index.html">首頁</a> / <span>相片詳細資訊</span>
+    </nav>
+    <nav>
+      <ul>
+        <li><a href="index.html">首頁</a></li>
+        <li><a href="gallery.html">相簿</a></li>
+        <li><a href="photo.html">相片詳細資訊</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <!-- 新增：相片展示區 (Carousel / Gallery) -->
+    <section class="photo-gallery-section">
+      <div class="photo-gallery">
+        <!-- 左切換箭頭 -->
+        <div class="arrow arrow-left" id="prevPhoto">&#9664;</div>
+
+        <!-- 大圖顯示容器 -->
+        <div class="main-photo-container">
+          <img id="mainPhoto" src="" alt="相片" style="max-width:300px; width:100%; height:auto;">
+        </div>
+
+        <!-- 右切換箭頭 -->
+        <div class="arrow arrow-right" id="nextPhoto">&#9654;</div>
+      </div>
+      <!-- 縮圖列 -->
+      <div class="thumbnail-container" id="thumbnailContainer"></div>
+    </section>
+
+    <!-- 原有表單 (相片詳細資訊) -->
+    <section class="photo-detail-section">
+      <form id="photoDetailForm">
+        <input type="hidden" id="photoUrl" name="photoUrl">
+        <div>
+          <label for="photoAlbum">相冊類別：</label>
+          <input type="text" id="photoAlbum" name="album" required>
+        </div>
+        <div>
+          <label for="photoTime">時間：</label>
+          <input type="datetime-local" id="photoTime" name="time">
+        </div>
+        <div>
+          <label for="photoLocation">地點：</label>
+          <input type="text" id="photoLocation" name="location">
+        </div>
+        <div>
+          <label for="photoDescription">說明：</label>
+          <textarea id="photoDescription" name="description" rows="4"></textarea>
+        </div>
+        <div>
+          <button type="submit" class="btn">更新內容</button>
+        </div>
+      </form>
+      <div id="updateMessage"></div>
+    </section>
+  </main>
 </body>
 </html>

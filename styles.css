@@ -170,7 +170,7 @@ main {
     color: #2575fc;
 }
 
-/* Lightbox Styling */
+/* Lightbox Styling (若有使用 Lightbox 可保留) */
 .lightbox {
     position: fixed;
     top: 0;
@@ -272,4 +272,64 @@ main {
         margin: 10px;
         padding: 15px;
     }
+}
+
+/* ---------------------------------------------- */
+/* 以下為「相片詳細頁」多張圖片切換 (Carousel) 相關 */
+/* ---------------------------------------------- */
+
+/* 相片主要區塊 + 縮圖列 + 切換箭頭 */
+.photo-gallery-section {
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.photo-gallery {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+.arrow {
+    cursor: pointer;
+    font-size: 2em;
+    padding: 0 10px;
+    user-select: none;
+    color: #666; /* 可自行修改箭頭顏色 */
+    transition: color 0.3s;
+}
+.arrow:hover {
+    color: #2575fc; /* 滑過箭頭時的顏色 */
+}
+
+.main-photo-container {
+    display: inline-block;
+    width: 320px; /* 可自行調整寬度 */
+    height: auto;
+    text-align: center;
+}
+
+.thumbnail-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.thumbnail-container img {
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    object-fit: cover;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    transition: transform 0.2s;
+}
+.thumbnail-container img:hover {
+    transform: scale(1.05);
+}
+.thumbnail-container img.selected {
+    border-color: #2575fc; /* 選中時的邊框顏色，可自行修改 */
 }
