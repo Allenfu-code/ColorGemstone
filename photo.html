@@ -6,13 +6,13 @@
   <meta name="description" content="相片詳細資訊">
   <title>相片詳細資訊 - 我的攝影作品集</title>
 
-  <!-- 原有樣式 -->
+  <!-- 原有樣式檔 -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- 1) 載入 Supabase 客戶端 (若已載入可省略) -->
+  <!-- Supabase 客戶端 (若已在其他檔案載入可省略) -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
 
-  <!-- 2) 載入我們的 photo.js -->
+  <!-- 您的 photo.js -->
   <script defer src="photo.js"></script>
 </head>
 <body>
@@ -30,50 +30,55 @@
     </nav>
   </header>
   <main>
-    <!-- 新增：相片展示區 (Carousel / Gallery) -->
-    <section class="photo-gallery-section">
-      <div class="photo-gallery">
-        <!-- 左切換箭頭 -->
-        <div class="arrow arrow-left" id="prevPhoto">&#9664;</div>
-
-        <!-- 大圖顯示容器 -->
-        <div class="main-photo-container">
-          <img id="mainPhoto" src="" alt="相片" style="max-width:300px; width:100%; height:auto;">
+    <!-- 1) 主要容器：左右分欄 -->
+    <div class="photo-main-container">
+      <!-- 左側：相片輪播區 -->
+      <section class="photo-left">
+        <div class="photo-gallery-section">
+          <div class="photo-gallery">
+            <div class="arrow arrow-left" id="prevPhoto">&#9664;</div>
+            <div class="main-photo-container">
+              <img id="mainPhoto" src="" alt="相片" style="max-width:300px; width:100%; height:auto;">
+            </div>
+            <div class="arrow arrow-right" id="nextPhoto">&#9654;</div>
+          </div>
+          <div class="thumbnail-container" id="thumbnailContainer"></div>
         </div>
 
-        <!-- 右切換箭頭 -->
-        <div class="arrow arrow-right" id="nextPhoto">&#9654;</div>
-      </div>
-      <!-- 縮圖列 -->
-      <div class="thumbnail-container" id="thumbnailContainer"></div>
-    </section>
+        <!-- 原有：詳細資訊表單 (若想保留在左側，也可放在右側) -->
+        <section class="photo-detail-section">
+          <form id="photoDetailForm">
+            <input type="hidden" id="photoUrl" name="photoUrl">
+            <div>
+              <label for="photoAlbum">相冊類別：</label>
+              <input type="text" id="photoAlbum" name="album" required>
+            </div>
+            <div>
+              <label for="photoTime">時間：</label>
+              <input type="datetime-local" id="photoTime" name="time">
+            </div>
+            <div>
+              <label for="photoLocation">地點：</label>
+              <input type="text" id="photoLocation" name="location">
+            </div>
+            <div>
+              <label for="photoDescription">說明：</label>
+              <textarea id="photoDescription" name="description" rows="4"></textarea>
+            </div>
+            <div>
+              <button type="submit" class="btn">更新內容</button>
+            </div>
+          </form>
+          <div id="updateMessage"></div>
+        </section>
+      </section>
 
-    <!-- 原有表單 (相片詳細資訊) -->
-    <section class="photo-detail-section">
-      <form id="photoDetailForm">
-        <input type="hidden" id="photoUrl" name="photoUrl">
-        <div>
-          <label for="photoAlbum">相冊類別：</label>
-          <input type="text" id="photoAlbum" name="album" required>
-        </div>
-        <div>
-          <label for="photoTime">時間：</label>
-          <input type="datetime-local" id="photoTime" name="time">
-        </div>
-        <div>
-          <label for="photoLocation">地點：</label>
-          <input type="text" id="photoLocation" name="location">
-        </div>
-        <div>
-          <label for="photoDescription">說明：</label>
-          <textarea id="photoDescription" name="description" rows="4"></textarea>
-        </div>
-        <div>
-          <button type="submit" class="btn">更新內容</button>
-        </div>
-      </form>
-      <div id="updateMessage"></div>
-    </section>
+      <!-- 右側：資料庫資訊顯示 -->
+      <section class="photo-right">
+        <h2>資料庫資訊</h2>
+        <div id="dbInfoResult">載入中...</div>
+      </section>
+    </div>
   </main>
 </body>
 </html>

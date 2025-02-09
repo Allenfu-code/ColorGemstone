@@ -333,3 +333,21 @@ main {
 .thumbnail-container img.selected {
     border-color: #2575fc; /* 選中時的邊框顏色，可自行修改 */
 }
+/* 左右兩欄排版 */
+.photo-main-container {
+    display: flex;
+    gap: 30px; /* 欄間距可自行調整 */
+  }
+  
+  /* 左側欄位 */
+  .photo-left {
+    flex: 1; 
+  }
+  
+  /* 右側欄位 */
+  .photo-right {
+    flex: 1; 
+    border-left: 1px solid #ddd;
+    padding-left: 20px;
+    max-width: 400px;
+  }

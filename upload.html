@@ -1,51 +1,65 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="上傳相片至我的攝影作品集">
-    <title>上傳相片 - 我的攝影作品集</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="upload.js"></script>
+  <meta charset="UTF-8">
+  <title>上傳相片 - 我的攝影作品集</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- 請先載入 Supabase JS，再載入 upload.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+  <script defer src="upload.js"></script>
 </head>
 <body>
-    <header>
-        <h1>上傳相片</h1>
-        <nav class="breadcrumb">
-            <a href="index.html">首頁</a> / <span>上傳相片</span>
-        </nav>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="gallery.html">相簿</a></li>
-                <li><a href="upload.html">上傳相片</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section class="upload-section">
-            <h2>上傳您的相片</h2>
-            <form id="uploadForm">
-                <div>
-                    <label for="albumSelect">選擇相片冊：</label>
-                    <select id="albumSelect" name="album" required>
-                        <!-- Options will be loaded dynamically from gallery.json -->
-                    </select>
-                </div>
-                <div>
-                    <label for="photoTitle">相片標題：</label>
-                    <input type="text" id="photoTitle" name="title" required>
-                </div>
-                <div>
-                    <label for="photoFile">選擇相片檔案：</label>
-                    <input type="file" id="photoFile" name="photo" accept="image/*" required>
-                </div>
-                <div>
-                    <button type="submit" class="btn">上傳相片</button>
-                </div>
-            </form>
-            <div id="uploadMessage"></div>
-        </section>
-    </main>
+  <header>
+    <h1>上傳相片</h1>
+    <nav class="breadcrumb">
+      <a href="index.html">首頁</a> / <span>上傳相片</span>
+    </nav>
+    <nav>
+      <ul>
+        <li><a href="index.html">首頁</a></li>
+        <li><a href="gallery.html">相簿</a></li>
+        <li><a href="upload.html">上傳相片</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="upload-section">
+      <h2>上傳您的相片</h2>
+      <form id="uploadForm">
+        <div>
+          <label for="albumSelect">選擇相片冊：</label>
+          <select id="albumSelect" name="album" required></select>
+        </div>
+        <div>
+          <label for="photoTitle">相片標題：</label>
+          <input type="text" id="photoTitle" name="title" required>
+        </div>
+        <div>
+          <label for="photoFile">選擇相片檔案：</label>
+          <input type="file" id="photoFile" name="photo" accept="image/*" required>
+        </div>
+
+        <!-- 新增欄位：拍攝時間、地點、說明 -->
+        <div>
+          <label for="photoTime">拍攝時間：</label>
+          <input type="datetime-local" id="photoTime" name="time">
+        </div>
+        <div>
+          <label for="photoLocation">拍攝地點：</label>
+          <input type="text" id="photoLocation" name="location">
+        </div>
+        <div>
+          <label for="photoDescription">說明：</label>
+          <textarea id="photoDescription" name="description" rows="3"></textarea>
+        </div>
+
+        <div>
+          <button type="submit" class="btn">上傳相片</button>
+        </div>
+      </form>
+      <div id="uploadMessage"></div>
+    </section>
+  </main>
 </body>
 </html>
