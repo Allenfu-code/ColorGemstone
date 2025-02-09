@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
     // 1. 初始化 Supabase 客戶端 (若已在其他檔案初始化，可省略)
     const { createClient } = window.supabase;
-    const supabaseUrl = "YOUR_SUPABASE_URL";     // <-- 請自行替換
-    const supabaseAnonKey = "YOUR_SUPABASE_ANON_KEY"; // <-- 請自行替換
+    const supabaseUrl = "https://jclwcnbsqpwtrgagalsr.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjbHdjbmJzcXB3dHJnYWdhbHNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzg0MDEzNDAsImV4cCI6MjA1Mzk3NzM0MH0.13xuYlYCS9uE5R_lopvJZuJD7BY85lEvY7G8xp204CY";
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
   
     // 2. 解析 URL 參數，取得 photoUrl 與 album
     const params = new URLSearchParams(window.location.search);
