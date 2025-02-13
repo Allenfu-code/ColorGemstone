@@ -1,55 +1,58 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="瀏覽我的攝影作品">
-    <title>相簿 - 我的攝影作品集</title>
-    <link rel="stylesheet" href="styles.css">
-    <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="瀏覽我的攝影作品">
+  <title>相簿 - 我的攝影作品集</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- 先載入 Supabase JS，再載入 script.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.0.0/dist/umd/supabase.min.js"></script>
+  <script defer src="script.js"></script>
 </head>
 <body>
-    <header>
-        <h1>相簿</h1>
-        <nav class="breadcrumb">
-            <a href="index.html">首頁</a> / <span>相簿</span>
-        </nav>
-        <nav>
-            <ul>
-                <li><a href="index.html">首頁</a></li>
-                <li><a href="gallery.html">相簿</a></li>
-                <li><a href="upload.html">上傳相片</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <div class="gallery-container">
-            <aside class="sidebar">
-                <h3>相片冊類別</h3>
-                <div id="album-categories">
-                    <!-- 勾選式類別選項將由 script.js 動態生成 -->
-                </div>
-            </aside>
-            <section class="gallery-content" id="gallery-content">
-                <div class="pagination-settings">
-                    <label for="itemsPerPage">每頁顯示: </label>
-                    <select id="itemsPerPage">
-                        <option value="4">4</option>
-                        <option value="8" selected>8</option>
-                        <option value="12">12</option>
-                        <option value="16">16</option>
-                    </select>
-                </div>
-                <div id="gallery-images" class="album-container">
-                    <!-- 篩選後並分頁的相片將顯示於此 -->
-                </div>
-                <div class="pagination-controls">
-                    <button id="prevPage">上一頁</button>
-                    <span id="pageInfo">第 1 頁</span>
-                    <button id="nextPage">下一頁</button>
-                </div>
-            </section>
+  <header>
+    <h1>相簿</h1>
+    <nav class="breadcrumb">
+      <a href="index.html">首頁</a> / <span>相簿</span>
+    </nav>
+    <nav>
+      <ul>
+        <li><a href="index.html">首頁</a></li>
+        <li><a href="gallery.html">相簿</a></li>
+        <li><a href="upload.html">上傳相片</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <div class="gallery-container">
+      <aside class="sidebar">
+        <h3>相片冊類別</h3>
+        <div id="album-categories">
+            <!-- 透過 script.js 動態生成勾選式類別清單 -->
         </div>
-    </main>
+      </aside>
+      <section class="gallery-content" id="gallery-content">
+        <div class="pagination-settings">
+          <label for="itemsPerPage">每頁顯示: </label>
+          <select id="itemsPerPage">
+            <option value="4">4</option>
+            <option value="8" selected>8</option>
+            <option value="12">12</option>
+            <option value="16">16</option>
+          </select>
+        </div>
+        <div id="gallery-images" class="album-container">
+          <!-- 篩選並分頁後的相片將顯示在此 -->
+        </div>
+        <div class="pagination-controls">
+          <button id="prevPage">上一頁</button>
+          <span id="pageInfo">第 1 頁</span>
+          <button id="nextPage">下一頁</button>
+        </div>
+      </section>
+    </div>
+  </main>
 </body>
 </html>
